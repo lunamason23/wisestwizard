@@ -63,5 +63,6 @@ html {
     display: flex;
     align-items: right;
     flex-direction: row;
+    width: 100em;
   }
 </style>

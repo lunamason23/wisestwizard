@@ -2,37 +2,38 @@
 import { ref, onMounted } from 'vue';
 
 let intervalId;
-const mana = ref(10)
 
-const managen1 = ref(0);
-const managen1Cost = ref(10);
-const managen1Mult = ref(1);
-
-const managen2 = ref(0);
-const managen2Cost = ref(10);
-const managen2Mult = ref(1);
-
-const addManagen1 = () => {
-  if (mana.value >= managen1Cost.value) {
-    managen1.value++;
-    mana.value-=managen1Cost.value;
-    managen1Cost.value*=10;
-    managen1Mult.value*=2;
-  }
+let mana = {
+  amount: ref(1)
 }
 
-const addManagen2 = () => {
-  if (mana.value >= managen2Cost.value) {
-    managen2.value++;
-    mana.value-=managen2Cost.value;
-    managen2Cost.value*=100;
-    managen2Mult.value*=2;
+const managen1 = {
+  amount: ref(0),
+  cost: ref(1),
+  costIncrease: ref(10),
+  mult: ref(1),
+  multIncrease: ref(2)
+};
+
+const managen2 = {
+  amount: ref(0),
+  cost: ref(1),
+  costIncrease: ref(10),
+  mult: ref(1),
+  multIncrease: ref(2)
+};
+
+const addManagen = (managenObj, manaObj) => {
+  if (manaObj.amount.value >= managenObj.cost.value) {
+    managenObj.amount.value++;
+    manaObj.amount.value-=managenObj.cost.value;
+    managenObj.cost.value*=managenObj.costIncrease.value;
+    managenObj.mult.value*=managenObj.multIncrease.value;
   }
 }
 
 function genTick() {
-  mana.value+=(managen1.value*managen1Mult.value);
-  managen1.value+=(managen2.value*managen2Mult.value);
+  mana.amount.value+=(managen1.amount.value*managen1.mult.value);
   
 }
 
@@ -48,17 +49,13 @@ onMounted(() => {
   <body>
     <div class="title">
       <h1 style="text-decoration-line: underline">Mana</h1>
-      <h3>{{ mana }}</h3>
+      <h3>{{ mana.amount }}</h3>
     </div>
     <div class="managens">
       <div class="managen">
-        <h1>{{ managen1 }}</h1>
-        <h1>x{{ managen1Mult }}</h1>
-        <button @click="addManagen1">{{ managen1Cost }}</button>
-      </div>
-      <div class="managen">
-        <h1>{{ managen2 }}</h1>
-        <button @click="addManagen2">{{ managen2Cost }}</button>
+        <h1>{{ managen1.amount }}</h1>
+        <h1>x{{ managen1.mult }}</h1>
+        <button @click="addManagen(managen1, mana)">{{ managen1.cost }}</button>
       </div>
     </div>
   </body>
@@ -102,6 +99,6 @@ onMounted(() => {
     background-color:#00475a;
   }
   h1 {
-    margin: 0px 10px;
+    margin: 0px 20px;
   }
 </style>
